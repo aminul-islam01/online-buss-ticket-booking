@@ -23,9 +23,9 @@ import SeeTicket from "../Pages/SeeTicket/SeeTicket";
             element: <OurTrip></OurTrip>
         },
         {
-          path: 'see-ticket',
-          element: <SeeTicket></SeeTicket>
-
+          path: 'see-ticket/:id',
+          element: <SeeTicket></SeeTicket>,
+          loader: ({params}) => fetch(`http://localhost:5000/ticket/${params.id}`)
         }
       ]
     },

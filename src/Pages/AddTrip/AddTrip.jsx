@@ -1,23 +1,34 @@
 import { useForm } from "react-hook-form"
-import json from './../../../public/seat.json'
+import seat from './../../../public/seat.json'
 
 const AddTrip = () => {
     const { register, handleSubmit } = useForm()
+
     const onSubmit = (data) => {
-        data.seat = json;
-        console.log(data)
+        fetch('http://localhost:5000/trips', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            const {insertedId} = data;
+            const ticket = {tripId: insertedId, seat};
+
+            fetch('http://localhost:5000/ticket', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(ticket)
+            })
+        })
+
     }
 
     return (
-        // <form onSubmit={handleSubmit(onSubmit)}>
-        //     <input {...register("firstName")} />
-        //     <select {...register("gender")}>
-        //         <option value="female">female</option>
-        //         <option value="male">male</option>
-        //         <option value="other">other</option>
-        //     </select>
-        //     <input type="submit" />
-        // </form>
         <div className="hero min-h-screen bg-base-200 px-5">
             <form onSubmit={handleSubmit(onSubmit)} className="card flex-shrink-0 w-full shadow-2xl bg-base-100">
                 <div className="card-body">
@@ -36,12 +47,12 @@ const AddTrip = () => {
                             <input type="text" {...register("bussName")} className="input input-bordered" />
                         </div>
                     </div>
-                    <div className="grid md:grid-cols-2 gap-5">
+                    <div className="grid md:grid-cols-2 gap-5"> 
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text">To:</span>
+                                <span className="label-text">Form:</span>
                             </label>
-                            <select {...register("to")} className="input input-bordered">
+                            <select {...register("form")} className="input input-bordered">
                                 <option value="Dhaka">Dhaka</option>
                                 <option value="Gopalgonj">Gopalgonj</option>
                                 <option value="Narail">Narail</option>
@@ -51,9 +62,9 @@ const AddTrip = () => {
                         </div>
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text">Form:</span>
+                                <span className="label-text">To:</span>
                             </label>
-                            <select {...register("form")} className="input input-bordered">
+                            <select {...register("to")} className="input input-bordered">
                                 <option value="Dhaka">Dhaka</option>
                                 <option value="Gopalgonj">Gopalgonj</option>
                                 <option value="Narail">Narail</option>
